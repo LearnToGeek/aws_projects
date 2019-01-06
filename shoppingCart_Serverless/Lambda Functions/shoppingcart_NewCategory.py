@@ -1,7 +1,9 @@
 import json
 import datetime
 import uuid
-import DBConnector as dbconnect
+import boto3
+
+dynamoDBClient = boto3.client("dynamodb")
 
 
 def lambda_handler(event, context):
@@ -22,8 +24,12 @@ def lambda_handler(event, context):
         
     }
     
-    response = dbconnect.NewCategory("Categories",newCategory)
+    response = NewCategory("Categories",newCategory)
     print("Category Saved !")
     return {
        'body':json.dumps(response)
     }
+
+def NewCategory(tableName,category):
+    response = dynamoDBClient.put_item(TableName=tableName,Item=category)
+    return response

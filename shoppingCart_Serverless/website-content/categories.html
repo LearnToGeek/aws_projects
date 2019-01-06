@@ -44,29 +44,36 @@
     function addCategory() {
         var category = {
             "category": document.getElementById("categorytitle").value,
-            "description": document.getElementById("description").value,
-            "createdon": "NA"
+            "description": document.getElementById("description").value
         };
 
 
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function () {
-            if (this.readyState == 4 && this.status == 200) {
-                var response = xhttp.responseText;
-                console.log("Success : " + response);
+            if (this.readyState==4 && this.status == 200) {
+                var response = JSON.parse(xhttp.responseText);
+                if(response.StatusCode==200)
+                {
+                    clearForm();
+                    alert("Category Saved Successfully !!");
+                }
+                else
+                {
+                    alert("Something went wrong !!");
+                }
             }
         }
 
         xhttp.open("POST", " https://r6h3p279qa.execute-api.us-east-1.amazonaws.com/Dev/category", true);
         xhttp.setRequestHeader("Content-Type", "application/json");
         xhttp.send(JSON.stringify(category));
-        clearForm();
+        
     }
 
     function clearForm()
     {
-        document.getElementById("categorytitle").text = null;
-        document.getElementById("description").text = null;
+        document.getElementById("categorytitle").value = null;
+        document.getElementById("description").value = null;
     }
 </script>
 

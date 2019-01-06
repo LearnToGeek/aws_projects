@@ -3,7 +3,7 @@
 
 <head>
 	<title>Shopping Cart</title>
-
+	<meta charset="utf-8"/>
 
 	<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
 	<link href="bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
@@ -25,13 +25,13 @@
 	<div id="top-bar" class="container">
 		<div class="row">
 			<div class="span4">
-				
+
 			</div>
 			<div class="span8">
 				<div class="account pull-right">
 					<ul class="user-menu">
-						<li><a href="#">My Account</a></li>
-						<li><a href="cart.html">Your Cart</a></li>
+						<li><a href="categories.html">Category</a></li>
+						<li><a href="products">Your Cart</a></li>
 						<li><a href="checkout.html">Checkout</a></li>
 						<li><a href="register.html">Login</a></li>
 					</ul>
@@ -42,14 +42,12 @@
 	<div id="wrapper" class="container">
 		<section class="navbar main-menu">
 			<div class="navbar-inner main-menu">
-				<a href="index.html" class="logo pull-left"><img src="themes/images/logo.png" class="site_logo" alt="" style="width:50%;height:50%"></a>
+				<a href="home.html" class="logo pull-left"><img src="themes/images/logo.png" class="site_logo" alt="" style="width:50%;height:50%"></a>
 				<nav id="menu" class="pull-right">
 					<ul>
-						<li><a href="./products.html">Woman</a>
-							<ul>
-								<li><a href="./products.html">Lacinia nibh</a></li>
-								<li><a href="./products.html">Eget molestie</a></li>
-								<li><a href="./products.html">Varius purus</a></li>
+						<li><a href="./products.html">Categories</a>
+							<ul id="categories_List">
+
 							</ul>
 						</li>
 						<li><a href="./products.html">Man</a></li>
@@ -67,7 +65,7 @@
 				</nav>
 			</div>
 		</section>
-		
+
 		<section class="header_text">
 			We stand for top quality templates. Our genuine developers always optimized bootstrap commercial templates.
 			<br />Don't miss to use our cheap abd best bootstrap templates.
@@ -349,18 +347,37 @@
 	</div>
 	<script src="themes/js/common.js"></script>
 	<script src="themes/js/jquery.flexslider-min.js"></script>
-	$(function() {
-	$(document).ready(function() {
-	$('.flexslider').flexslider({
-	animation: "fade",
-	slideshowSpeed: 4000,
-	animationSpeed: 600,
-	controlNav: false,
-	directionNav: true,
-	controlsContainer: ".flex-container" // the container that holds the flexslider
-	});
-	});
-	});
+	<script type="text/javascript">
+
+		function Call_API() {
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function () {
+				if (this.readyState == 4 && this.status == 200) {
+					var response = JSON.parse(xhttp.responseText);
+		
+					for(i=0;i<response.length;i++)
+					{
+						add_li_element("categories_List",response[i].categoryId, response[i].category);
+					}
+				}
+			}
+			xhttp.open("GET", "https://r6h3p279qa.execute-api.us-east-1.amazonaws.com/Dev/category/all");
+			xhttp.setRequestHeader("Content-Type", "application/json");
+			xhttp.send({"type":"all"});
+		}
+		if (window.addEventListener)
+			window.addEventListener("load", Call_API, false);
+		else if (window.attachEvent)
+			window.attachEvent("onload", Call_API);
+		else window.onload = Call_API;
+
+		function add_li_element(List_id, id, li_text) {
+			var ul = document.getElementById(List_id);
+			var li = document.createElement("li");
+			li.appendChild(document.createTextNode(li_text))
+			li.setAttribute("id", id);
+			ul.appendChild(li);
+		}
 	</script>
 </body>
 
