@@ -1,13 +1,14 @@
 import json
+import boto3
 import datetime
 import uuid
-import boto3
 
 dynamoDBClient = boto3.client("dynamodb")
 
 
 def lambda_handler(event, context):
-    
+
+    # New Category    
     newCategory = {
         "CategoryId":{
           'S':str(uuid.uuid4())
@@ -23,13 +24,19 @@ def lambda_handler(event, context):
         }
         
     }
-    
-    response = NewCategory("Categories",newCategory)
-    print("Category Saved !")
+    try:
+        response = NewCategory("Categories",newCategory)
+    except:
+        # Return Response with HTTP code 000
+        response = {'ResponseMetadata':{'HTTPStatusCode':000}}
+
+    # Retrun response to API     
     return {
-       'body':json.dumps(response)
+       'StatusCode':response['ResponseMetadata']['HTTPStatusCode']
     }
 
+
+# Method to add new category in DynamoDB
 def NewCategory(tableName,category):
     response = dynamoDBClient.put_item(TableName=tableName,Item=category)
     return response

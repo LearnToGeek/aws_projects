@@ -1,17 +1,84 @@
 <html>
+
 <head>
     <title>
         Products
     </title>
 </head>
+
 <body>
-    <h1>Working On It....</h1>
+    <center>
+        <h1>New Product</h1>
+        <table style="text-align:right">
+            <tr>
+                <td>Product Name : </td>
+                <td><input id="productname" placeholder="Product Name"></td>
+            </tr>
+            <tr>
+                <td>Caategory : </td>
+                <td style="text-align:left">
+                    <select id="ddlCategory">
+                        <option>Select Category</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Price : </td>
+                <td style="text-align:left"><input id="price" placeholder="Price" type="number"></td>
+            </tr>
+            <tr>
+                <td>Stock : </td>
+                <td style="text-align:left"><input id="stock" placeholder="Stock" type="number"></td>
+            </tr>
+            <tr>
+                <td>Description : </td>
+                <td><input id="description" placeholder="Description"></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <center>
+                        <button type="button" onclick="addProduct()">Add Product</button>
+                    </center>
+                </td>
+            </tr>
+
+        </table>
+    </center>
 </body>
 <script>
-    $(function(){
-        $(document).ready(function(){
-                
-        });
-    });
+    function addProduct() {
+
+    }
+
+    function Call_API() {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                var response = JSON.parse(xhttp.responseText);
+
+                for (i = 0; i < response.length; i++) {
+                    add_option_element("ddlCategory", response[i].categoryId, response[i].category);
+                }
+            }
+        }
+        xhttp.open("GET", "https://r6h3p279qa.execute-api.us-east-1.amazonaws.com/Dev/category/all");
+        xhttp.setRequestHeader("Content-Type", "application/json");
+        xhttp.send({ "type": "all" });
+    }
+
+    if (window.addEventListener)
+        window.addEventListener("load", Call_API, false);
+    else if (window.attachEvent)
+        window.attachEvent("onload", Call_API);
+    else window.onload = Call_API;
+
+    function add_option_element(List_id, id, option_text) {
+			var select = document.getElementById(List_id);
+			var option = document.createElement("option");
+            option.value=id;
+            option.text=option_text;
+			select.add(option);
+		}
 </script>
+
 </html>
